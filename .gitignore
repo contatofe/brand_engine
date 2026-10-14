@@ -8,3 +8,5 @@ dist/
 code.js
 
 .env
+
+.DS_Store
