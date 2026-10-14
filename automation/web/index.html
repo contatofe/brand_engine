@@ -1,0 +1,1400 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Brand Engine</title>
+    <link rel="icon" href="assets/anacouto-coutomon.svg" />
+    <style>
+      @font-face {
+        font-family: "Kern Compressed";
+        src: url("assets/fonts/KernCompressed-Variable.ttf") format("truetype");
+        font-weight: 100 900;
+        font-display: swap;
+      }
+      @font-face {
+        font-family: "Kern Standard";
+        src: url("assets/fonts/KernStandard-Bold.otf") format("opentype");
+        font-weight: 700;
+        font-display: swap;
+      }
+
+      :root {
+        color-scheme: light;
+        --ink: #0a0a0a;
+        --paper: #ffffff;
+        --bone: #f6f4ee;
+        --orange: #ff4922;
+        --cream: #e4e8d3;
+        --line: #e6e4dd;
+        --hairline: rgba(10, 10, 10, 0.18);
+        --focus: #3140e0;
+        --muted: #767672;
+        --muted-soft: #a5a49f;
+        --display: "Kern Compressed", "Arial Narrow", sans-serif;
+        --label: "Kern Standard", Inter, -apple-system, sans-serif;
+        --body: Inter, -apple-system, sans-serif;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        height: 100%;
+      }
+
+      body {
+        font-family: var(--body);
+        margin: 0;
+        padding: 0;
+        color: var(--ink);
+        background: var(--bone);
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      .app {
+        display: grid;
+        grid-template-columns: 300px 1fr;
+        min-height: 100vh;
+      }
+
+      .rail {
+        background: var(--ink);
+        color: var(--paper);
+        padding: 28px 26px 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 32px;
+        position: sticky;
+        top: 0;
+        height: 100vh;
+      }
+      .rail .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .rail .brand img {
+        height: 14px;
+        display: block;
+      }
+      .rail .brand .dot {
+        width: 4px;
+        height: 4px;
+        border-radius: 999px;
+        background: var(--orange);
+      }
+      .rail .brand .studio {
+        font-family: var(--label);
+        font-weight: 700;
+        font-size: 10px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.55);
+        transform: translateY(1px);
+      }
+
+      .nameplate {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .nameplate .eyebrow-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .nameplate .eyebrow {
+        font-family: var(--label);
+        font-weight: 700;
+        font-size: 10px;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.5);
+      }
+      .nameplate .eyebrow-row .pill {
+        font-family: var(--label);
+        font-weight: 700;
+        font-size: 10px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        padding: 3px 8px 2px;
+        border-radius: 999px;
+        background: var(--orange);
+        color: var(--paper);
+        line-height: 1;
+      }
+      .nameplate .mono {
+        font-family: var(--display);
+        font-variation-settings: "wght" 900;
+        font-weight: 900;
+        font-size: clamp(84px, 8vw, 108px);
+        line-height: 0.82;
+        letter-spacing: -0.03em;
+        color: var(--paper);
+        margin: 24px 0 0;
+      }
+      .nameplate .mono .dot-o {
+        color: var(--orange);
+      }
+      .nameplate .meta {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding-top: 4px;
+      }
+      .nameplate .meta .pill {
+        font-family: var(--label);
+        font-weight: 700;
+        font-size: 10px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        padding: 4px 10px 3px;
+        border-radius: 999px;
+        background: var(--orange);
+        color: var(--paper);
+        line-height: 1;
+      }
+      .nameplate .meta .caption {
+        font-family: var(--label);
+        font-weight: 700;
+        font-size: 10px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.55);
+      }
+
+      .rail .sep {
+        height: 1px;
+        background: rgba(255, 255, 255, 0.09);
+      }
+
+      /* Vertical tabs live in the rail */
+      .rail-nav {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+      .rail-nav .nav-eyebrow {
+        font-family: var(--label);
+        font-weight: 700;
+        font-size: 10px;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.4);
+        margin-bottom: 10px;
+      }
+      .rail-nav .tab-btn {
+        all: unset;
+        display: flex;
+        align-items: baseline;
+        gap: 10px;
+        padding: 11px 0;
+        color: rgba(255, 255, 255, 0.55);
+        font-family: var(--display);
+        font-variation-settings: "wght" 800;
+        font-weight: 800;
+        font-size: 24px;
+        letter-spacing: -0.005em;
+        line-height: 1;
+        cursor: pointer;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+        transition: color 0.18s;
+      }
+      .rail-nav .tab-btn:last-child {
+        border-bottom: none;
+      }
+      .rail-nav .tab-btn::before {
+        content: "";
+        width: 6px;
+        height: 6px;
+        border-radius: 999px;
+        background: transparent;
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        transform: translateY(-3px);
+        transition:
+          background 0.18s,
+          border-color 0.18s;
+      }
+      .rail-nav .tab-btn:hover {
+        color: var(--paper);
+      }
+      .rail-nav .tab-btn.active {
+        color: var(--paper);
+      }
+      .rail-nav .tab-btn.active::before {
+        background: var(--orange);
+        border-color: var(--orange);
+      }
+
+      .rail-foot {
+        margin-top: auto;
+        display: flex;
+        justify-content: space-between;
+        font-family: var(--body);
+        font-size: 10px;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.35);
+      }
+
+      .workbench {
+        padding: 28px clamp(32px, 6vw, 88px) 80px;
+        background: var(--bone);
+        min-width: 0;
+      }
+      .workbench-inner {
+        max-width: 880px;
+      }
+
+      .section-head {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        align-items: end;
+        gap: 24px;
+        padding-bottom: 28px;
+        border-bottom: 1px solid var(--hairline);
+        margin-bottom: 40px;
+      }
+      .section-eyebrow {
+        font-family: var(--label);
+        font-weight: 700;
+        font-size: 11px;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--muted);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 14px;
+      }
+      h1.section-title {
+        font-family: var(--display);
+        font-variation-settings: "wght" 900;
+        font-weight: 900;
+        font-size: clamp(56px, 7vw, 96px);
+        line-height: 0.9;
+        letter-spacing: -0.02em;
+        margin: 0;
+      }
+      h1.section-title em {
+        font-style: normal;
+        color: var(--orange);
+      }
+      .section-sub {
+        font-family: var(--body);
+        color: var(--muted);
+        font-size: 14px;
+        margin: 0;
+        padding-bottom: 6px;
+        max-width: 40ch;
+        text-align: right;
+        line-height: 1.5;
+      }
+
+      .panel {
+        display: none;
+      }
+      .panel.active {
+        display: block;
+      }
+
+      /* Sub-tabs: hairline underline pattern instead of loud pills */
+      .subtabs {
+        display: flex;
+        gap: 32px;
+        margin-bottom: 40px;
+        border-bottom: 1px solid var(--hairline);
+      }
+      .subtab-btn {
+        all: unset;
+        padding: 0 0 16px;
+        color: var(--muted);
+        font-family: var(--label);
+        font-weight: 700;
+        font-size: 12px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.15s;
+      }
+      .subtab-btn:hover {
+        color: var(--ink);
+      }
+      .subtab-btn.active {
+        color: var(--ink);
+      }
+      .subtab-btn.active::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: -1px;
+        height: 2px;
+        background: var(--orange);
+      }
+      .subpanel {
+        display: none;
+      }
+      .subpanel.active {
+        display: block;
+      }
+
+      .field {
+        display: block;
+        margin-bottom: 24px;
+      }
+      label {
+        display: block;
+        font-family: var(--label);
+        font-weight: 700;
+        font-size: 10px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-bottom: 10px;
+      }
+
+      input[type="text"],
+      textarea {
+        width: 100%;
+        padding: 14px 0;
+        border: none;
+        border-bottom: 1px solid var(--ink);
+        border-radius: 0;
+        font-size: 18px;
+        font-family: var(--body);
+        color: var(--ink);
+        background: transparent;
+        outline: none;
+        transition: border-color 0.15s;
+      }
+      input[type="text"]::placeholder,
+      textarea::placeholder {
+        color: var(--muted-soft);
+      }
+      input[type="text"]:focus,
+      textarea:focus {
+        border-color: var(--orange);
+      }
+      textarea {
+        min-height: 96px;
+        resize: vertical;
+        padding: 14px 0;
+        line-height: 1.5;
+      }
+
+      /* File input: custom shell around the native control */
+      .file-drop {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 18px 20px;
+        border: 1px dashed rgba(10, 10, 10, 0.22);
+        background: var(--paper);
+        border-radius: 2px;
+        cursor: pointer;
+        transition:
+          border-color 0.15s,
+          background 0.15s;
+      }
+      .file-drop:hover {
+        border-color: var(--ink);
+      }
+      .file-drop .file-drop-label {
+        font-family: var(--label);
+        font-weight: 700;
+        font-size: 11px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+      .file-drop .file-drop-cta {
+        font-family: var(--label);
+        font-weight: 700;
+        font-size: 11px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--orange);
+      }
+      input[type="file"] {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+      }
+
+      img.preview {
+        display: none;
+        width: 100%;
+        max-height: 260px;
+        border-radius: 2px;
+        margin: 16px 0 8px;
+        object-fit: cover;
+      }
+
+      /* Actions ------------------------------------------------- */
+      .actions {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        margin-top: 32px;
+        padding-top: 28px;
+        border-top: 1px solid var(--hairline);
+      }
+      button.primary {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        background: var(--ink);
+        color: var(--paper);
+        border: none;
+        padding: 18px 32px;
+        border-radius: 2px;
+        font-family: var(--display);
+        font-variation-settings: "wght" 900;
+        font-weight: 900;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        cursor: pointer;
+        font-size: 15px;
+        line-height: 1;
+        transition:
+          background 0.15s,
+          transform 0.15s;
+      }
+      button.primary::after {
+        content: "→";
+        font-family: var(--body);
+        font-weight: 400;
+        font-size: 16px;
+        transform: translateY(-1px);
+      }
+      button.primary:hover:not(:disabled) {
+        background: var(--orange);
+      }
+      button.primary:disabled {
+        background: transparent;
+        color: var(--muted-soft);
+        border: 1px solid var(--line);
+        cursor: not-allowed;
+      }
+      button.primary:disabled::after {
+        color: var(--muted-soft);
+      }
+
+      .ai-step-label {
+        font-family: var(--label);
+        font-weight: 700;
+        font-size: 10px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin: 32px 0 12px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .ai-step-label::before {
+        content: "";
+        width: 16px;
+        height: 1px;
+        background: var(--ink);
+      }
+      .options {
+        display: grid;
+        gap: 8px;
+        margin-bottom: 8px;
+      }
+      .option-card {
+        border: 1px solid var(--line);
+        background: var(--paper);
+        border-radius: 2px;
+        padding: 18px 20px;
+        cursor: pointer;
+        font-size: 15px;
+        font-family: var(--body);
+        line-height: 1.4;
+        transition:
+          border-color 0.15s,
+          background 0.15s,
+          transform 0.15s;
+        position: relative;
+      }
+      .option-card:hover {
+        border-color: var(--ink);
+      }
+      .option-card.selected {
+        border-color: var(--orange);
+        background: var(--paper);
+        box-shadow: inset 3px 0 0 var(--orange);
+        padding-left: 22px;
+      }
+      .option-card img {
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        object-fit: cover;
+        border-radius: 1px;
+        margin-bottom: 0;
+        display: block;
+      }
+      .image-options {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+      }
+      .image-options .option-card {
+        padding: 6px;
+      }
+      .image-options .option-card.selected {
+        box-shadow: inset 0 0 0 2px var(--orange);
+        padding: 6px;
+      }
+
+      #status {
+        margin-top: 28px;
+        font-family: var(--label);
+        font-weight: 700;
+        font-size: 11px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        white-space: pre-wrap;
+        color: var(--muted);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      #status:not(:empty)::before {
+        content: "";
+        width: 6px;
+        height: 6px;
+        border-radius: 999px;
+        background: var(--muted);
+        display: inline-block;
+        animation: statusPulse 1.4s ease-in-out infinite;
+      }
+      #status.status-ok {
+        color: #146b34;
+      }
+      #status.status-ok::before {
+        background: #146b34;
+        animation: none;
+      }
+      #status.status-error {
+        color: var(--orange);
+      }
+      #status.status-error::before {
+        background: var(--orange);
+        animation: none;
+      }
+      @keyframes statusPulse {
+        0%,
+        100% {
+          opacity: 0.35;
+        }
+        50% {
+          opacity: 1;
+        }
+      }
+
+      .hint {
+        font-size: 12px;
+        color: var(--muted);
+        margin: 10px 0 0;
+        font-family: var(--body);
+        line-height: 1.5;
+      }
+
+      .downloads {
+        display: grid;
+        gap: 10px;
+        margin-top: 20px;
+      }
+      .download-btn {
+        all: unset;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        padding: 16px 24px;
+        border: 1px solid var(--ink);
+        background: var(--paper);
+        color: var(--ink);
+        border-radius: 2px;
+        font-family: var(--label);
+        font-weight: 700;
+        font-size: 11px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition:
+          background 0.15s,
+          color 0.15s;
+        text-align: center;
+      }
+      .download-btn::after {
+        content: "↓";
+        font-family: var(--body);
+        font-weight: 400;
+        font-size: 14px;
+      }
+      .download-btn:hover {
+        background: var(--ink);
+        color: var(--paper);
+      }
+
+      /* Chat --------------------------------------------------- */
+      .chat-shell {
+        display: flex;
+        flex-direction: column;
+        height: calc(100vh - 320px);
+        min-height: 480px;
+      }
+      .chat-messages {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        overflow-y: auto;
+        padding: 4px 4px 20px 0;
+        flex: 1;
+        scrollbar-width: thin;
+      }
+      .chat-messages:empty::before {
+        content: "Comece a conversa.";
+        font-family: var(--label);
+        font-weight: 700;
+        font-size: 11px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--muted-soft);
+        margin: auto;
+      }
+      .chat-bubble {
+        max-width: 78%;
+        padding: 14px 18px;
+        border-radius: 2px;
+        font-size: 15px;
+        font-family: var(--body);
+        line-height: 1.5;
+        white-space: pre-wrap;
+      }
+      .chat-bubble p {
+        margin: 0 0 8px;
+      }
+      .chat-bubble p:last-child {
+        margin-bottom: 0;
+      }
+      .chat-bubble ul,
+      .chat-bubble ol {
+        margin: 0 0 8px;
+        padding-left: 20px;
+      }
+      .chat-bubble ul:last-child,
+      .chat-bubble ol:last-child {
+        margin-bottom: 0;
+      }
+      .chat-bubble li {
+        margin-bottom: 4px;
+      }
+      .chat-bubble code {
+        background: rgba(10, 10, 10, 0.06);
+        border-radius: 2px;
+        padding: 1px 4px;
+        font-size: 0.9em;
+        font-family: ui-monospace, "SF Mono", Menlo, monospace;
+      }
+      .chat-bubble.user {
+        align-self: flex-end;
+        background: var(--ink);
+        color: var(--paper);
+      }
+      .chat-bubble.model {
+        align-self: flex-start;
+        background: var(--paper);
+        color: var(--ink);
+        border-left: 2px solid var(--orange);
+      }
+      .chat-bubble.loading {
+        color: var(--muted);
+        font-style: italic;
+        border-left-color: var(--muted-soft);
+      }
+      .chat-bubble.error {
+        border-left: 2px solid var(--orange);
+        color: var(--orange);
+        background: var(--paper);
+      }
+      .chat-input-row {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding-top: 20px;
+        border-top: 1px solid var(--hairline);
+      }
+      .chat-input-row input[type="text"] {
+        flex: 1;
+        margin-bottom: 0;
+        padding: 12px 0;
+        font-size: 15px;
+      }
+      .chat-input-row .chat-send-btn {
+        padding: 14px 24px;
+        font-size: 12px;
+      }
+
+      /* Responsive --------------------------------------------- */
+      @media (max-width: 900px) {
+        .app {
+          grid-template-columns: 1fr;
+        }
+        .rail {
+          height: auto;
+          position: static;
+          padding: 24px 22px 28px;
+          flex-direction: column;
+          gap: 22px;
+        }
+        .nameplate .mono {
+          font-size: 72px;
+        }
+        .rail-nav {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 8px;
+        }
+        .rail-nav .tab-btn {
+          font-size: 18px;
+          border-bottom: none;
+          padding: 10px 0;
+        }
+        .rail-nav .nav-eyebrow {
+          grid-column: 1 / -1;
+          margin-bottom: 4px;
+        }
+        .rail-foot {
+          display: none;
+        }
+        .workbench {
+          padding: 40px 22px 60px;
+        }
+        .section-head {
+          grid-template-columns: 1fr;
+          align-items: start;
+          gap: 12px;
+        }
+        .section-sub {
+          text-align: left;
+          max-width: none;
+          padding-bottom: 0;
+        }
+        h1.section-title {
+          font-size: clamp(44px, 12vw, 64px);
+        }
+        .image-options {
+          grid-template-columns: 1fr;
+        }
+        .chat-shell {
+          height: auto;
+          min-height: 420px;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        #status:not(:empty)::before {
+          animation: none;
+        }
+        * {
+          transition: none !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <aside class="rail">
+        <div class="brand">
+          <img src="assets/anacouto-marca-white.svg" alt="Ana Couto" />
+          <span class="dot"></span>
+          <span class="studio">Toolkit 2.0</span>
+        </div>
+
+        <div class="nameplate">
+          <div class="eyebrow-row">
+            <span class="eyebrow">Brand Engine</span>
+            <span class="pill">MVP</span>
+          </div>
+          <h2 class="mono">i<span class="dot-o">.</span>ac</h2>
+        </div>
+
+        <div class="sep"></div>
+
+        <nav class="rail-nav" aria-label="Ferramentas">
+          <span class="nav-eyebrow">Ferramentas</span>
+          <button class="tab-btn active" data-tab="creative">
+            Creative Engine
+          </button>
+          <button class="tab-btn" data-tab="chat">Brand Chat</button>
+        </nav>
+
+        <div class="rail-foot">
+          <span>Ana Couto</span>
+        </div>
+      </aside>
+
+      <main class="workbench">
+        <div class="workbench-inner">
+          <!-- Creative Engine -->
+          <div class="panel active" id="panel-creative">
+            <header class="section-head">
+              <div>
+                <h1 class="section-title">Creative<br /><em>Engine</em></h1>
+              </div>
+              <p class="section-sub">
+                Crie campanhas personalizadas <br />a partir dos assets da sua
+                marca.
+              </p>
+            </header>
+
+            <div class="subtabs">
+              <button class="subtab-btn active" data-subtab="manual">
+                Manual
+              </button>
+              <button class="subtab-btn" data-subtab="ai">Gerar com IA</button>
+            </div>
+
+            <!-- Modo manual -->
+            <div class="subpanel active" id="subpanel-manual">
+              <div class="field">
+                <label for="manual-headline">Headline</label>
+                <input
+                  id="manual-headline"
+                  type="text"
+                  placeholder="Escreva seu título aqui"
+                />
+              </div>
+
+              <div class="field">
+                <label for="manual-image">Imagem</label>
+                <label for="manual-image" class="file-drop">
+                  <span class="file-drop-label" id="manual-file-name"
+                    >Nenhuma imagem selecionada</span
+                  >
+                  <span class="file-drop-cta">Escolher arquivo</span>
+                </label>
+                <input id="manual-image" type="file" accept="image/*" />
+                <img id="manual-preview" class="preview" alt="preview" />
+              </div>
+
+              <div class="actions">
+                <button class="primary" id="manual-submit">Enviar</button>
+              </div>
+            </div>
+
+            <!-- Modo IA -->
+            <div class="subpanel" id="subpanel-ai">
+              <div class="field">
+                <label for="brief">Campanha</label>
+                <textarea
+                  id="brief"
+                  placeholder="Descreva a sua campanha"
+                ></textarea>
+              </div>
+
+              <div class="actions">
+                <button class="primary" id="generate-btn">
+                  Gerar sugestões
+                </button>
+                <p class="hint" id="ai-hint"></p>
+              </div>
+
+              <div id="ai-results" style="display: none">
+                <div class="ai-step-label">Escolha o headline</div>
+                <div class="options" id="headline-options"></div>
+
+                <div class="ai-step-label">Escolha a imagem</div>
+                <div class="image-options" id="image-options"></div>
+
+                <div class="actions">
+                  <button class="primary" id="ai-submit" disabled>
+                    Confirmar e enviar
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Brand Chat -->
+          <div class="panel" id="panel-chat">
+            <header class="section-head">
+              <div>
+                <h1 class="section-title">Brand<br /><em>Chat</em></h1>
+              </div>
+              <p class="section-sub">
+                Converse com sua marca para tirar dúvidas, <br />
+                afinar o tom de voz e gerar textos.
+              </p>
+            </header>
+
+            <div class="chat-shell">
+              <div class="chat-messages" id="chat-messages"></div>
+              <div class="chat-input-row">
+                <input
+                  id="chat-input"
+                  type="text"
+                  placeholder="Pergunte algo sobre a marca..."
+                />
+                <button class="primary chat-send-btn" id="chat-send">
+                  Enviar
+                </button>
+              </div>
+              <p class="hint" id="chat-hint"></p>
+            </div>
+          </div>
+
+          <div id="status"></div>
+          <div class="downloads" id="downloads"></div>
+        </div>
+      </main>
+    </div>
+
+    <script>
+      const SUPABASE_URL = process.env.SUPABASE_URL;
+      const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
+
+      function setStatus(message, ok) {
+        const el = document.getElementById("status");
+        el.textContent = message;
+        el.className =
+          ok === undefined ? "" : ok ? "status-ok" : "status-error";
+      }
+
+      async function callFunction(name, body) {
+        const res = await fetch(`${SUPABASE_URL}/functions/v1/${name}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+          },
+          body: JSON.stringify(body),
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || `Erro ${res.status}`);
+        return data;
+      }
+
+      async function supabaseGet(path) {
+        const res = await fetch(`${SUPABASE_URL}${path}`, {
+          headers: {
+            apikey: SUPABASE_ANON_KEY,
+            Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+          },
+        });
+        if (!res.ok)
+          throw new Error(`Supabase ${res.status}: ${await res.text()}`);
+        return res.json();
+      }
+
+      const WATCH_INTERVAL_MS = 3000;
+      const WATCH_MAX_ATTEMPTS = 100; // ~5 min
+
+      function clearDownloads() {
+        document.getElementById("downloads").innerHTML = "";
+      }
+
+      function renderDownloads(renders) {
+        const box = document.getElementById("downloads");
+        box.innerHTML = "";
+        if (!renders || Object.keys(renders).length === 0) return;
+
+        const btn = document.createElement("button");
+        btn.className = "download-btn";
+        btn.textContent = "Baixar peças";
+        btn.onclick = async () => {
+          btn.disabled = true;
+          try {
+            await downloadAllFiles(renders);
+          } finally {
+            btn.disabled = false;
+          }
+        };
+        box.appendChild(btn);
+      }
+
+      async function downloadFile(url, filename) {
+        const res = await fetch(url);
+        const blob = await res.blob();
+        const objectUrl = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = objectUrl;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(objectUrl);
+      }
+
+      async function downloadAllFiles(renders) {
+        const entries = Object.entries(renders);
+        for (let i = 0; i < entries.length; i++) {
+          const [name, url] = entries[i];
+          await downloadFile(url, `${name}.png`);
+          if (i < entries.length - 1)
+            await new Promise((r) => setTimeout(r, 400));
+        }
+      }
+
+      function watchJob(jobId) {
+        clearDownloads();
+        let attempts = 0;
+
+        const tick = async () => {
+          attempts += 1;
+          try {
+            const rows = await supabaseGet(
+              `/rest/v1/jobs?id=eq.${jobId}&select=status,error_message,renders`,
+            );
+            const row = rows && rows[0];
+
+            if (!row) {
+              setStatus("Projeto não encontrado.", false);
+              return;
+            }
+
+            if (row.status === "done") {
+              setStatus("Projeto aplicado! Baixe as peças abaixo.", true);
+              renderDownloads(row.renders);
+              return;
+            }
+
+            if (row.status === "error") {
+              setStatus(
+                `Erro ao aplicar: ${row.error_message || "sem detalhes"}`,
+                false,
+              );
+              return;
+            }
+
+            if (attempts >= WATCH_MAX_ATTEMPTS) {
+              setStatus(
+                "Ainda aguardando o plugin aplicar — confirme se o modo automático está ligado no Figma.",
+                false,
+              );
+              return;
+            }
+
+            setStatus(
+              `Projeto criado! Aguardando o plugin aplicar (${row.status})...`,
+            );
+            setTimeout(tick, WATCH_INTERVAL_MS);
+          } catch (error) {
+            setStatus(`Erro ao consultar status: ${error.message}`, false);
+          }
+        };
+
+        tick();
+      }
+
+      async function fileToCorrectedDataUrl(file) {
+        const bitmap = await createImageBitmap(file, {
+          imageOrientation: "from-image",
+        });
+        const canvas = document.createElement("canvas");
+        canvas.width = bitmap.width;
+        canvas.height = bitmap.height;
+        canvas.getContext("2d").drawImage(bitmap, 0, 0);
+        return canvas.toDataURL("image/png");
+      }
+
+      document.querySelectorAll(".tab-btn").forEach((btn) => {
+        btn.onclick = () => {
+          document
+            .querySelectorAll(".tab-btn")
+            .forEach((b) => b.classList.remove("active"));
+          document
+            .querySelectorAll(".panel")
+            .forEach((p) => p.classList.remove("active"));
+          btn.classList.add("active");
+          document
+            .getElementById(`panel-${btn.dataset.tab}`)
+            .classList.add("active");
+          setStatus("");
+          clearDownloads();
+        };
+      });
+
+      document.querySelectorAll(".subtab-btn").forEach((btn) => {
+        btn.onclick = () => {
+          document
+            .querySelectorAll(".subtab-btn")
+            .forEach((b) => b.classList.remove("active"));
+          document
+            .querySelectorAll(".subpanel")
+            .forEach((p) => p.classList.remove("active"));
+          btn.classList.add("active");
+          document
+            .getElementById(`subpanel-${btn.dataset.subtab}`)
+            .classList.add("active");
+          setStatus("");
+          clearDownloads();
+        };
+      });
+
+      let manualImageDataUrl = null;
+
+      document
+        .getElementById("manual-image")
+        .addEventListener("change", async (event) => {
+          const file = event.target.files && event.target.files[0];
+          const nameLabel = document.getElementById("manual-file-name");
+          if (!file) {
+            manualImageDataUrl = null;
+            document.getElementById("manual-preview").style.display = "none";
+            if (nameLabel) nameLabel.textContent = "Nenhuma imagem selecionada";
+            return;
+          }
+          manualImageDataUrl = await fileToCorrectedDataUrl(file);
+          const preview = document.getElementById("manual-preview");
+          preview.src = manualImageDataUrl;
+          preview.style.display = "block";
+          if (nameLabel) nameLabel.textContent = file.name;
+        });
+
+      document.getElementById("manual-submit").onclick = async () => {
+        const headline = document
+          .getElementById("manual-headline")
+          .value.trim();
+        if (!headline) return setStatus("Digite um headline.", false);
+        if (!manualImageDataUrl) return setStatus("Escolha uma imagem.", false);
+
+        setStatus("Criando projeto...");
+        try {
+          const { job } = await callFunction("create-job", {
+            headline,
+            image: manualImageDataUrl,
+            source: "manual",
+          });
+          watchJob(job.id);
+        } catch (error) {
+          setStatus(`Erro: ${error.message}`, false);
+        }
+      };
+
+      // --- Modo IA ---
+      let selectedHeadline = null;
+      let selectedImage = null;
+
+      function renderAiResults(headlines, images) {
+        selectedHeadline = null;
+        selectedImage = null;
+
+        const headlineBox = document.getElementById("headline-options");
+        headlineBox.innerHTML = "";
+        headlines.forEach((text) => {
+          const card = document.createElement("div");
+          card.className = "option-card";
+          card.textContent = text;
+          card.onclick = () => {
+            document
+              .querySelectorAll("#headline-options .option-card")
+              .forEach((c) => c.classList.remove("selected"));
+            card.classList.add("selected");
+            selectedHeadline = text;
+            updateAiSubmitState();
+          };
+          headlineBox.appendChild(card);
+        });
+
+        const imageBox = document.getElementById("image-options");
+        imageBox.innerHTML = "";
+        images.forEach((dataUrl) => {
+          const card = document.createElement("div");
+          card.className = "option-card";
+          const img = document.createElement("img");
+          img.src = dataUrl;
+          card.appendChild(img);
+          card.onclick = () => {
+            document
+              .querySelectorAll("#image-options .option-card")
+              .forEach((c) => c.classList.remove("selected"));
+            card.classList.add("selected");
+            selectedImage = dataUrl;
+            updateAiSubmitState();
+          };
+          imageBox.appendChild(card);
+        });
+
+        document.getElementById("ai-results").style.display = "block";
+      }
+
+      function updateAiSubmitState() {
+        document.getElementById("ai-submit").disabled = !(
+          selectedHeadline && selectedImage
+        );
+      }
+
+      document.getElementById("generate-btn").onclick = async () => {
+        const brief = document.getElementById("brief").value.trim();
+        if (!brief) return setStatus("Digite um briefing.", false);
+
+        document.getElementById("ai-results").style.display = "none";
+        document.getElementById("ai-hint").textContent =
+          "Gerando sugestões (pode levar alguns segundos)...";
+        setStatus("");
+
+        try {
+          const { headlines, images } = await callFunction("generate-draft", {
+            brief,
+          });
+          document.getElementById("ai-hint").textContent = "";
+          renderAiResults(headlines, images);
+        } catch (error) {
+          document.getElementById("ai-hint").textContent = "";
+          setStatus(`Erro ao gerar sugestões: ${error.message}`, false);
+        }
+      };
+
+      document.getElementById("ai-submit").onclick = async () => {
+        if (!selectedHeadline || !selectedImage) return;
+
+        setStatus("Criando projeto...");
+        try {
+          const { job } = await callFunction("create-job", {
+            headline: selectedHeadline,
+            image: selectedImage,
+            source: "ai",
+          });
+          watchJob(job.id);
+        } catch (error) {
+          setStatus(`Erro: ${error.message}`, false);
+        }
+      };
+
+      // --- Chat da marca ---
+      let chatHistory = []; // { role: 'user'|'model', text }
+      let chatSending = false;
+
+      function escapeHtml(str) {
+        const div = document.createElement("div");
+        div.textContent = str;
+        return div.innerHTML;
+      }
+
+      function renderInlineMarkdown(str) {
+        return str
+          .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+          .replace(/(^|[^*])\*(?!\*)([^*]+?)\*(?!\*)/g, "$1<em>$2</em>")
+          .replace(/`([^`]+)`/g, "<code>$1</code>");
+      }
+
+      function renderMarkdown(text) {
+        const lines = escapeHtml(text).split("\n");
+        let html = "";
+        let listType = null;
+
+        const closeList = () => {
+          if (listType) {
+            html += listType === "ol" ? "</ol>" : "</ul>";
+            listType = null;
+          }
+        };
+
+        for (const rawLine of lines) {
+          const line = rawLine.trim();
+          const ulMatch = /^[-*]\s+(.*)/.exec(line);
+          const olMatch = /^\d+\.\s+(.*)/.exec(line);
+
+          if (ulMatch) {
+            if (listType !== "ul") {
+              closeList();
+              html += "<ul>";
+              listType = "ul";
+            }
+            html += `<li>${renderInlineMarkdown(ulMatch[1])}</li>`;
+          } else if (olMatch) {
+            if (listType !== "ol") {
+              closeList();
+              html += "<ol>";
+              listType = "ol";
+            }
+            html += `<li>${renderInlineMarkdown(olMatch[1])}</li>`;
+          } else if (line === "") {
+            closeList();
+          } else {
+            closeList();
+            html += `<p>${renderInlineMarkdown(line)}</p>`;
+          }
+        }
+        closeList();
+        return html;
+      }
+
+      function appendChatBubble(role, text, extraClass) {
+        const box = document.getElementById("chat-messages");
+        const bubble = document.createElement("div");
+        bubble.className = `chat-bubble ${role}${extraClass ? " " + extraClass : ""}`;
+        if (role === "model") {
+          bubble.innerHTML = renderMarkdown(text);
+        } else {
+          bubble.textContent = text;
+        }
+        box.appendChild(bubble);
+        box.scrollTop = box.scrollHeight;
+        return bubble;
+      }
+
+      async function sendChatMessage() {
+        if (chatSending) return;
+        const input = document.getElementById("chat-input");
+        const message = input.value.trim();
+        if (!message) return;
+
+        chatSending = true;
+        document.getElementById("chat-send").disabled = true;
+        input.value = "";
+
+        appendChatBubble("user", message);
+        const loadingBubble = appendChatBubble(
+          "model",
+          "Pensando...",
+          "loading",
+        );
+
+        try {
+          const { reply } = await callFunction("brand-chat", {
+            message,
+            history: chatHistory,
+          });
+          loadingBubble.remove();
+          appendChatBubble("model", reply);
+          chatHistory.push({ role: "user", text: message });
+          chatHistory.push({ role: "model", text: reply });
+        } catch (error) {
+          loadingBubble.remove();
+          appendChatBubble("model", `Erro: ${error.message}`, "error");
+        } finally {
+          chatSending = false;
+          document.getElementById("chat-send").disabled = false;
+          input.focus();
+        }
+      }
+
+      document.getElementById("chat-send").onclick = sendChatMessage;
+      document
+        .getElementById("chat-input")
+        .addEventListener("keydown", (event) => {
+          if (event.key === "Enter") sendChatMessage();
+        });
+    </script>
+  </body>
+</html>

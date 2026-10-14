@@ -1,0 +1,14 @@
+{
+  "name": "Brand Engine",
+  "id": "1665035874802909332",
+  "api": "1.0.0",
+  "main": "code.js",
+  "capabilities": [],
+  "enableProposedApi": false,
+  "documentAccess": "dynamic-page",
+  "editorType": ["figma"],
+  "ui": "ui.html",
+  "networkAccess": {
+    "allowedDomains": ["https://vosacdqzhbjnyniwtwse.supabase.co"]
+  }
+}
